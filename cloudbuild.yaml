@@ -1,0 +1,25 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args: 
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/online-247:$COMMIT_SHA'
+      - '.'
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/online-247:$COMMIT_SHA'
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'online-247'
+      - '--image=gcr.io/$PROJECT_ID/online-247:$COMMIT_SHA'
+      - '--region=us-central1'
+      - '--cpu=1'
+      - '--memory=2048Mi'
+      - '--allow-unauthenticated'
+      - '--set-secrets=TOKEN=token:latest'
+images:
+  - 'gcr.io/$PROJECT_ID/online-247:$COMMIT_SHA'
+logsBucket: 'gs://online-247-bucket/logs'
