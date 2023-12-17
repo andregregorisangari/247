@@ -1,11 +1,11 @@
 const dotenv = require('dotenv');
-const { Client, MessageAttachment, RichPresence, MessageEmbed } = require('discord.js-selfbot-v13'); // Define Client Constructor And The MessageAttachment Constructor
-const exp = require('express'); // Define The Express Package
-const s = exp(); // Make New Express Server
+const { Client, RichPresence } = require('discord.js-selfbot-v13');
+const express = require('express');
+
+dotenv.config();
+
 const autoRespond = "Kalo lama balas berarti lagi tidur bang, ini auto respond wkwk";
-const bot = new Client({
-  checkUpdate: false
-}); // Define The User
+const bot = new Client({ checkUpdate: false });
 const ganti = [
   "Sedang Mancing",
   "Sedang Tidur",
@@ -17,100 +17,96 @@ const ganti = [
   "Text 8",
   "Text 9",
   "Dan Seterusnya",
-]; // Ganti Ke Teks Yang Mau Ganti²
-const prefix = "."
-const textUtama = "Google Cloud Skills Boost 24 Hours"
-const textDua = "{tanggal} {bulan}" // Contoh Kalo Pake Bulan, Tanggal, Jam / Menit
-const textTiga = "Google Cloud Skills Boost 24 Hours" // Contoh Kalo Ganti-Ganti
-const textEmpat = "Bangkit 24 Hours"
-const type = "LISTENING" // Type :: PLAYING, LISTENING, WATCHING, STREAMING ( Besar Semua )
-const gambarGede = "mp:attachments/919320101113708596/1176850402348630016/Google_Cloud_SolutionArtboard_10.jpg"
-const gambarKecil = "mp:attachments/919320101113708596/1176850402348630016/Google_Cloud_SolutionArtboard_10.jpg"
-const labelButtonSatu = "GCSB Profile"
-const labelButtonDua = "LinkedIn"
-const linkButtonSatu = "https://www.cloudskillsboost.google/public_profiles/8bc875b0-0dc9-4cc8-90ea-1a8bfe1ca8ec"
-const linkButtonDua = "https://www.linkedin.com/in/andregregs/"
+];
 
-s.all('/', (req, res) => { // Build The Express Server
-  res.send("Ready") // Print Text "Ready Dek"
-})
+const prefix = ".";
+const textUtama = "Google Cloud Skills Boost 24 Hours";
+const textDua = "{tanggal} {bulan}";
+const textTiga = "Google Cloud Skills Boost 24 Hours";
+const textEmpat = "Bangkit 24 Hours";
+const type = "LISTENING";
+const gambarGede = "mp:attachments/919320101113708596/1176850402348630016/Google_Cloud_SolutionArtboard_10.jpg";
+const gambarKecil = "mp:attachments/919320101113708596/1176850402348630016/Google_Cloud_SolutionArtboard_10.jpg";
+const labelButtonSatu = "GCSB Profile";
+const labelButtonDua = "LinkedIn";
+const linkButtonSatu = "https://www.cloudskillsboost.google/public_profiles/8bc875b0-0dc9-4cc8-90ea-1a8bfe1ca8ec";
+const linkButtonDua = "https://www.linkedin.com/in/andregregs/";
 
-s.listen(8002, () => { // Make The Express Servers Listen To 8080 Port
-  console.log("Port : 8002") // Console "Port : 8080"
-})
+const s = express();
+
+s.all('/', (req, res) => {
+  res.send("Ready");
+});
+
+s.listen(8002, () => {
+  console.log("Port : 8002");
+});
 
 bot.on('debug', (a) => {
-  if (a.startsWith("Hit a 429")) process.kill(1)
-})
+  if (a.startsWith("Hit a 429")) process.kill(1);
+});
 
-bot.on('ready', async () => { // If The User Was Ready
-  setInterval(() => { // Create New Interval Function
-    function dim(m, y) { // Create "dim" Function
-      return new Date(y, m, 0).getDate() // Get The Day Count On Specific Month
+bot.on('ready', async () => {
+  setInterval(() => {
+    function dim(m, y) {
+      return new Date(y, m, 0).getDate();
     }
+
     function getOrdinalNum(n) {
-      return n.toString(); // Convert the number to a string without appending ordinal suffix
+      return n.toString();
     }
-    const gonta = ganti[Math.floor(Math.random() * ganti.length)]; // Pick Random Value From The Array
-    const date = new Date() // Get New Date
-    let tanggal = getOrdinalNum(date.getDate()) // Get The Current Dates
-    let lD = dim(date.getMonth() + 1, date.getFullYear()) // Define The Day Counts On Current Month
-    let H = date.getHours() // Get The Current Hours
-    let hours = (H + 7) % 24// Convert Current Hours To WIB
-    let M = date.getMinutes() // Get The Current Minutes
-    let minutes = (M + 0) // Do Absolutely Nothing
-    let months = date.getMonth()
-    let dy = date.getDate()
-    let year = date.getFullYear()
+
+    const gonta = ganti[Math.floor(Math.random() * ganti.length)];
+    const date = new Date();
+    let tanggal = getOrdinalNum(date.getDate());
+    let lD = dim(date.getMonth() + 1, date.getFullYear());
+    let H = date.getHours();
+    let hours = (H + 7) % 24;
+    let M = date.getMinutes();
+    let minutes = (M + 0);
+    let months = date.getMonth();
+    let dy = date.getDate();
+    let year = date.getFullYear();
     let monthst = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "Desember"
-    ]
-    let month = monthst[months]
-    if (hours < 10) hours = `0${hours}` // If The Hours Length Is 1 Digit, It Add Zero Behind It
-    if (minutes < 10) minutes = `0${minutes}` // If The Minutes Length Is 1 Digit, It Add Zero Behind It
-    if (dy == lD) tanggal = `Last` // If Current Dates And Last Dates Is Same, It Will Change The Dates To "Last"
-    let hasilSatu = textUtama.replace(/{tanggal}/g, tanggal).replace(/{menit}/g, minutes).replace(/{ganti}/g, gonta).replace(/{jam}/g, hours).replace(/{bulan}/g, month).replace(/{tahun}/g, year)
-    let hasilDua = textDua.replace(/{tanggal}/g, tanggal).replace(/{menit}/g, minutes).replace(/{ganti}/g, gonta).replace(/{jam}/g, hours).replace(/{bulan}/g, month).replace(/{tahun}/g, year)
-    let hasilTiga = textTiga.replace(/{tanggal}/g, tanggal).replace(/{menit}/g, minutes).replace(/{ganti}/g, gonta).replace(/{jam}/g, hours).replace(/{bulan}/g, month).replace(/{tahun}/g, year)
-    let hasilEmpat = textEmpat.replace(/{tanggal}/g, tanggal).replace(/{menit}/g, minutes).replace(/{ganti}/g, gonta).replace(/{jam}/g, hours).replace(/{bulan}/g, month).replace(/{tahun}/g, year)
-    let pr = new RichPresence() // Creates New RPC
-      .setName(`${hasilSatu}`) // RPC Name
-      .setType(`${type}`.toUpperCase()) // RPC Type
-      .setApplicationId("993210680859701369") // RPC Application ID
-      .setAssetsLargeImage(`${gambarGede}`) // RPC Small Image ID
-      .setAssetsSmallImage(`${gambarKecil}`) // RPC Large Image ID
-      .setAssetsLargeText(`${hasilEmpat}`) // RPC Extra Text
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "Desember"
+    ];
+    let month = monthst[months];
+
+    if (hours < 10) hours = `0${hours}`;
+    if (minutes < 10) minutes = `0${minutes}`;
+    if (dy == lD) tanggal = `Last`;
+
+    let hasilSatu = textUtama.replace(/{tanggal}/g, tanggal).replace(/{menit}/g, minutes).replace(/{ganti}/g, gonta).replace(/{jam}/g, hours).replace(/{bulan}/g, month).replace(/{tahun}/g, year);
+    let hasilDua = textDua.replace(/{tanggal}/g, tanggal).replace(/{menit}/g, minutes).replace(/{ganti}/g, gonta).replace(/{jam}/g, hours).replace(/{bulan}/g, month).replace(/{tahun}/g, year);
+    let hasilTiga = textTiga.replace(/{tanggal}/g, tanggal).replace(/{menit}/g, minutes).replace(/{ganti}/g, gonta).replace(/{jam}/g, hours).replace(/{bulan}/g, month).replace(/{tahun}/g, year);
+    let hasilEmpat = textEmpat.replace(/{tanggal}/g, tanggal).replace(/{menit}/g, minutes).replace(/{ganti}/g, gonta).replace(/{jam}/g, hours).replace(/{bulan}/g, month).replace(/{tahun}/g, year);
+
+    let pr = new RichPresence()
+      .setName(`${hasilSatu}`)
+      .setType(`${type}`.toUpperCase())
+      .setApplicationId("993210680859701369")
+      .setAssetsLargeImage(`${gambarGede}`)
+      .setAssetsSmallImage(`${gambarKecil}`)
+      .setAssetsLargeText(`${hasilEmpat}`)
       .setAssetsSmallText(`DC - ${bot.user.tag}`)
-      .setState(`${hasilDua}`) // RPC State
-      .setDetails(`${hasilTiga}`) // RPC Details
-      .addButton(`${labelButtonSatu}`, `${linkButtonSatu}`) // Add New Button
-      .addButton(`${labelButtonDua}`, `${linkButtonDua}`)
-    bot.user.setActivity(pr.toJSON()) // Activate The RPC
-  }, 30 * 1000)
-  console.log(`${bot.user.tag} Is Ready!\nTranslate Command : ${prefix}translate <text> | <language code>`) // Console "Client Is Ready!"
-})
+      .setState(`${hasilDua}`)
+      .setDetails(`${hasilTiga}`)
+      .addButton(`${labelButtonSatu}`, `${linkButtonSatu}`)
+      .addButton(`${labelButtonDua}`, `${linkButtonDua}`);
+
+    bot.user.setActivity(pr.toJSON());
+  }, 30 * 1000);
+  console.log(`${bot.user.tag} Is Ready!\nTranslate Command : ${prefix}translate <text> | <language code>`);
+});
 
 bot.on('messageCreate', async (msg) => {
-  if (msg.content.includes(`<@${bot.user.id}>`) && !msg.author.bot) return msg.reply({ content: `${autoRespond}` })
-  if (
-    !msg.content.toLowerCase().startsWith(prefix) ||
-    msg.author.id != bot.user.id
-  ) return
-  const [cmd, ...args] = msg.content
-    .slice(prefix.length)
-    .trim()
-    .split(/ +/g)
+  if (msg.content.includes(`<@${bot.user.id}>`) && !msg.author.bot) return msg.reply({ content: `${autoRespond}` });
+
+  if (!msg.content.toLowerCase().startsWith(prefix) || msg.author.id != bot.user.id) return;
+
+  const [cmd, ...args] = msg.content.slice(prefix.length).trim().split(/ +/g);
+
   if (cmd.toLowerCase() == "translate" || cmd.toLowerCase() == "tl") {
     let arguments = args.join(" ").split(" | ");
     if (!arguments[0] || !arguments[1]) return msg.reply({ content: "Contoh Command :\n.tl Hello | id" });
@@ -130,8 +126,6 @@ bot.on('messageCreate', async (msg) => {
       msg.reply({ content: "Error fetching or parsing translation." });
     }
   }
-})
+});
 
-dotenv.config();
-
-bot.login(process.env.TOKEN) // Login To The User
+bot.login(process.env.TOKEN);
