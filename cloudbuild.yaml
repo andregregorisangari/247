@@ -20,6 +20,7 @@ steps:
       - '--memory=2048Mi'
       - '--allow-unauthenticated'
       - '--set-secrets=TOKEN=token:latest'
+    serviceAccount: online-247-serviceaccount@online-247-discordjs.iam.gserviceaccount.com
 images:
   - 'gcr.io/$PROJECT_ID/online-247:$COMMIT_SHA'
 logsBucket: 'gs://online-247-buckets/logs'
