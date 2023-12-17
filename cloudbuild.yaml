@@ -22,4 +22,4 @@ steps:
       - '--set-secrets=TOKEN=token:latest'
 images:
   - 'gcr.io/$PROJECT_ID/online-247:$COMMIT_SHA'
-logsBucket: 'gs://online-247-bucket/logs'
+logsBucket: 'gs://online-247-buckets/logs'
