@@ -32,14 +32,11 @@ const labelButtonDua = "LinkedIn";
 const linkButtonSatu = "https://www.cloudskillsboost.google/public_profiles/8bc875b0-0dc9-4cc8-90ea-1a8bfe1ca8ec";
 const linkButtonDua = "https://www.linkedin.com/in/andregregs/";
 
-const s = express();
+const app = express();
+const port = process.env.PORT || 8001;
 
-s.all('/', (req, res) => {
-  res.send("Ready");
-});
-
-s.listen(8002, () => {
-  console.log("Port : 8002");
+app.listen(`${port}`, () => {
+  console.log(`Server berjalan di port ${port}`);
 });
 
 bot.on('debug', (a) => {
