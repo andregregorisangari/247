@@ -98,31 +98,54 @@ bot.on('ready', async () => {
 });
 
 bot.on('messageCreate', async (msg) => {
-  if (msg.content.includes(`<@${bot.user.id}>`) && !msg.author.bot) return msg.reply({ content: `${autoRespond}` });
+  if (msg.content.includes(`<@${bot.user.id}>`) && !msg.author.bot) {
+    try {
+      await msg.reply({ content: `${autoRespond}` });
+    } catch (error) {
+      console.error("Error replying to message:", error);
+    }
+    return;
+  }
 
-  if (!msg.content.toLowerCase().startsWith(prefix) || msg.author.id != bot.user.id) return;
+  if (!msg.content.toLowerCase().startsWith(prefix) || msg.author.id !== bot.user.id) return;
 
   const [cmd, ...args] = msg.content.slice(prefix.length).trim().split(/ +/g);
 
-  if (cmd.toLowerCase() == "translate" || cmd.toLowerCase() == "tl") {
+  if (cmd.toLowerCase() === "translate" || cmd.toLowerCase() === "tl") {
     let arguments = args.join(" ").split(" | ");
-    if (!arguments[0] || !arguments[1]) return msg.reply({ content: "Contoh Command :\n.tl Hello | id" });
-
-    const params = new URLSearchParams({
-      to: arguments[1].toLowerCase(),
-      text: arguments[0]
-    });
+    if (!arguments[0] || !arguments[1]) {
+      try {
+        await msg.reply({ content: "Contoh Command :\n.tl Hello | id" });
+      } catch (error) {
+        console.error("Error replying to message:", error);
+      }
+      return;
+    }
 
     try {
-      const response = await fetch("https://api.popcat.xyz/translate?" + params);
+      const response = await fetch("https://api.popcat.xyz/translate?" + new URLSearchParams({
+        to: arguments[1].toLowerCase(),
+        text: arguments[0]
+      }));
+
       const result = await response.json();
 
-      msg.delete().then(() => msg.channel.send({ content: `${result.translated}` }));
+      try {
+        await msg.delete();
+        await msg.channel.send({ content: `${result.translated}` });
+      } catch (error) {
+        console.error("Error deleting or sending message:", error);
+      }
     } catch (error) {
       console.error("Error fetching or parsing translation:", error);
-      msg.reply({ content: "Error fetching or parsing translation." });
+      try {
+        await msg.reply({ content: "Error fetching or parsing translation." });
+      } catch (error) {
+        console.error("Error replying to message:", error);
+      }
     }
   }
 });
+
 
 bot.login(process.env.TOKEN);
