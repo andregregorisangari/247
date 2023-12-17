@@ -35,8 +35,8 @@ s.all('/', (req, res) => { // Build The Express Server
   res.send("Ready") // Print Text "Ready Dek"
 })
 
-s.listen(8080, () => { // Make The Express Servers Listen To 8080 Port
-  console.log("Port : 8080") // Console "Port : 8080"
+s.listen(8002, () => { // Make The Express Servers Listen To 8080 Port
+  console.log("Port : 8002") // Console "Port : 8080"
 })
 
 bot.on('debug', (a) => {
@@ -131,5 +131,7 @@ bot.on('messageCreate', async (msg) => {
     }
   }
 })
+
+dotenv.config();
 
 bot.login(process.env.TOKEN) // Login To The User
